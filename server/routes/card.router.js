@@ -10,7 +10,6 @@ router.get("/:id", (req, res) => {
     pool
       .query(queryText, [req.params.id])
       .then(result => {
-        console.log(result.rows);
         res.send(result.rows);
       })
       .catch(error => {
@@ -24,7 +23,6 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
   if (req.isAuthenticated()) {
-    console.log("in router post deck card ", req.body.deck_id);
     let queryText = `INSERT INTO "flashcard"."card" 
                             ("deck_id","prompt","answer") 
                             VALUES ($1, $2, $3);`;
