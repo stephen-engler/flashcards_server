@@ -10,7 +10,6 @@ router.get('/', (req, res) => {
         let queryText = 'SELECT * FROM "flashcard"."deck" WHERE user_id = $1;';
         pool.query(queryText, [req.user.id])
             .then((result)=>{
-                console.log('in deck router get ', result.rows);
                 res.send(result.rows);
             })
             .catch((error)=>{
@@ -24,8 +23,9 @@ router.get('/', (req, res) => {
 });
 
 router.delete('/:id', (req, res)=>{
+    console.log('in router delete ', req.params.id);
     if(req.isAuthenticated()){
-        const queryText = `DELETE FROM "flashcard"."card" WHERE id = $1;`;
+        const queryText = `DELETE FROM "flashcard"."deck" WHERE id = $1;`;
         pool.query(queryText, [req.params.id])
             .then((result)=>{
                 res.sendStatus(200);
