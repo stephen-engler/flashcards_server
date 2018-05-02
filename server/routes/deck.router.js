@@ -62,4 +62,46 @@ router.post('/', (req, res) => {
     }
 });
 
+router.post('/card', (req,res)=>{
+    if(req.isAuthenticated()){
+        console.log('in router post deck card ', req.body.deck_id);
+        let queryText = `INSERT INTO "flashcard"."card" 
+                            ("deck_id","prompt","answer") 
+                            VALUES ($1, $2, $3);`;
+
+        pool
+          .query(queryText, [
+            req.body.deck.id,
+            req.body.prompt,
+            req.body.answer
+          ])
+          .then(result => {
+            res.sendStatus(200);
+          })
+          .catch(error => {
+            res.sendStatus(500);
+          });
+    }else{
+        res.sendStatus(403)
+    }
+})
+
+router.put('/card/:id', (req,res)=>{
+    if(req.isAuthenticated()){
+        const queryText = `UPDATE "flashcard"."card" 
+                            SET "prompt"=$1, 
+                                "answer"=$2 
+                            WHERE id = $3;`;
+        pool.query(queryText, [req.body.prompt, req.body.answer, req.params.id])
+            .then((result)=>{
+                res.sendStatus(200);
+            })
+            .catch((error)=>{
+                res.sendStatus(500);
+            })
+    }else{
+        res.sendStatus(403);
+    }
+})
+
 module.exports = router;
